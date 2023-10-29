@@ -3,8 +3,8 @@ import time
 file_size = None  # размер файла
 net_speed = None  # скорость интернет-соединения
 perсent = 0  # для расчета
-perсentOutput = 0  # для вывода на экран
-message = "Вы ввели неверное значение. Используйте целые положительные значения."
+percentage_output = 0  # для вывода на экран
+error_message = "Вы ввели неверное значение. Используйте целые положительные значения."
 
 while True:
     try:
@@ -12,9 +12,9 @@ while True:
         if file_size > 0:
             break
         else:
-            print(message)
+            print(error_message)
     except ValueError:
-        print(message)
+        print(error_message)
 
 while True:
     try:
@@ -22,35 +22,35 @@ while True:
         if net_speed > 0:
             break
         else:
-            print(message)
+            print(error_message)
     except ValueError:
-        print(message)
+        print(error_message)
 
-downl_time_sec = int(file_size / net_speed)  # Время скачивания в секундах
-download_time = time.gmtime(downl_time_sec)
-consent_downl = None
+download_time_sec = int(file_size / net_speed)  # Время скачивания в секундах
+download_time = time.gmtime(download_time_sec)
+download_confirm = None
 
 if download_time.tm_hour > 1:
     print("Скачивание займет", download_time.tm_hour, "часов.")
     print("Вы уверены, что хотите продолжить?")
     print('Введите "да" или "нет"')
     while True:
-        consent_downl = input().lower()
-        if consent_downl == "да" or consent_downl == "нет":
+        download_confirm = input().lower()
+        if download_confirm == "да" or download_confirm == "нет":
             break
         else:
             print('Неверный ввод, необходим ответ "да" или "нет"')
 
-if consent_downl == "да" or consent_downl == None:
+if download_confirm == "да" or download_confirm == None:
     print("Загрузка обновления началась.")
     # start_time = time.time()
-    for i in range(1, downl_time_sec + 1):
+    for i in range(1, download_time_sec + 1):
         perсent = int(
             net_speed * i / file_size * 100
         )  # вычисляем текущий процент загрузки
 
-        if perсentOutput != perсent:  # Если предыдущее значение не равно текущему
-            perсentOutput = perсent  # Передаем новое значение в переменную для вывода
+        if percentage_output != perсent:  # Если предыдущее значение не равно текущему
+            percentage_output = perсent  # Передаем новое значение в переменную для вывода
             print(
                 "Прошло",
                 i,
@@ -59,9 +59,9 @@ if consent_downl == "да" or consent_downl == None:
                 "из",
                 file_size,
                 "Мб",
-                "(" + str(perсentOutput) + "%)",
+                "(" + str(percentage_output) + "%)",
             )
-        else:  # в противном случае выводим символы, которые показывают, что процесс не стоит на месте
+        else:  # если проценты повторяются - выводим символы
             print(i, "sec")
 
         time.sleep(0.99)  # "синхронизация" времени с реальным
@@ -73,7 +73,7 @@ if consent_downl == "да" or consent_downl == None:
     # end_time =time.time()
     print("Загрузка обновления завершена.")
 
-elif consent_downl == "нет":
+elif download_confirm == "нет":
     print("Загрузка отменена пользователем")
 
 
